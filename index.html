@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zaldy Hotel Booking Form</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom right, #3494e6, #ec6ead);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    h1 {
+      color: #45a049;
+      font-weight: 700;
+      font-size: 50px;
+      text-shadow: #333 2px 2px;
+      margin-top: 0; /* Adjusted margin */
+    }
+
+    form {
+        position:relative;
+        top: 40%;
+
+      max-width: 400px;
+      margin: 20px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    select,
+    input,
+    textarea {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      box-sizing: border-box;
+    }
+
+    input[type="radio"] {
+      margin-right: 5px;
+    }
+
+    input[type="submit"] {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+
+    .reservation-details {
+      margin-top: 20px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .success-message {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #5cb85c;
+      color: white;
+      border-radius: 5px;
+      display: none;
+    }
+
+    .radio-group {
+      display: grid;
+      
+      
+    }
+    #yesRadio
+    {
+        position: absolute;
+        right: 19%;
+    }
+    #noRadio{
+        position: absolute;
+        left: 60px;
+    }
+    
+    /* Adjusted style for first name and last name inputs */
+    #firstName,
+    #lastName {
+      width: 98%;
+      display: inline-block;
+      margin-right: 4%; /* Adjusted margin */
+    }
+  </style>
+</head>
+
+<body>
+  <form id="bookingForm">
+    <label for="roomType">Room Type:</label>
+    <select id="roomType" name="roomType" required class="form-control">
+      <option value="single">Single Room</option>
+      <option value="double">Double Room</option>
+      <option value="suite">Suite</option>
+    </select>
+
+    <label for="guests">Number of Guests:</label>
+    <input type="number" id="guests" name="guests" min="1" required class="form-control">
+
+    <div class="form-row">
+      <div class="col-md-6">
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" placeholder="First Name" required class="form-control">
+      </div>
+      <div class="col-md-6">
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" placeholder="Last Name" required class="form-control">
+      </div>
+    </div>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" placeholder="Email" required class="form-control">
+
+    <label for="arrivalDate">Arrival Date:</label>
+    <input type="date" id="arrivalDate" name="arrivalDate" required class="form-control">
+
+    <label for="arrivalTime">Arrival Time:</label>
+    <input type="time" id="arrivalTime" name="arrivalTime" required class="form-control">
+
+    <label style="font-weight: bold;">Free Pickup:</label>
+    <div class="radio-group">
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="pickup" value="yes" id="yesRadio">
+        <label class="form-check-label" for="yesRadio">Yes, Sure!</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="pickup" value="no" id="noRadio">
+        <label class="form-check-label" for="noRadio"> No,I already rented a car.</label>
+      </div>
+    </div>
+
+    <label for="flightNumber">Flight Number:</label>
+    <input type="text" id="flightNumber" name="flightNumber" placeholder="Flight Number" class="form-control">
+
+    <label for="otherRequests">Other Requests:</label>
+    <textarea id="otherRequests" name="otherRequests" rows="4" placeholder="Any other special requests..." class="form-control"></textarea>
+
+    <input type="submit" value="Complete Reservation" class="btn btn-primary">
+  </form>
+
+  <div class="reservation-details" id="reservationDetails"></div>
+  <div class="success-message" id="successMessage">Form submitted successfully!</div>
+
+  <script>
+    document.getElementById('bookingForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+      displayFormData();
+    });
+
+    function displayFormData() {
+      const formObject = {
+        roomType: document.getElementById('roomType').value,
+        guests: document.getElementById('guests').value,
+        firstName: document.getElementById('firstName').value,
+        lastName: document.getElementById('lastName').value,
+        email: document.getElementById('email').value,
+        arrivalDate: document.getElementById('arrivalDate').value,
+        arrivalTime: document.getElementById('arrivalTime').value,
+        pickup: document.querySelector('input[name="pickup"]:checked').value || '',
+        flightNumber: document.getElementById('flightNumber').value,
+        otherRequests: document.getElementById('otherRequests').value,
+      };
+
+      const detailsContainer = document.getElementById('reservationDetails');
+      const successMessage = document.getElementById('successMessage');
+
+      detailsContainer.innerHTML = '<h2>Reservation Details:</h2>';
+      for (const key in formObject) {
+        if (formObject.hasOwnProperty(key)) {
+          detailsContainer.innerHTML += `<p><strong>${key}:</strong> ${formObject[key]}</p>`;
+        }
+      }
+
+      successMessage.style.display = 'block';
+    }
+
+  </script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+
+</html>
